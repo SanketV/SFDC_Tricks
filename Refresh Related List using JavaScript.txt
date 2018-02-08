@@ -1,0 +1,29 @@
+{!REQUIRESCRIPT("/soap/ajax/14.0/connection.js")} 
+{!REQUIRESCRIPT("/soap/ajax/14.0/apex.js")}
+{!REQUIRESCRIPT("/support/api/28.0/interaction.js")}
+
+try
+{ 
+   var contactId ='{!Contact.Id}'
+   var result = sforce.apex.execute("ContactTeamMemberUtility", "removeUserFromContactTeam", {recordId : contactId}); 
+
+   refreshHistoryRelatedList();
+   alert(result);
+} 
+catch(err)
+{ 
+   handleError(err);
+}
+
+function refreshHistoryRelatedList()
+{
+   window.sfdcPage.makeRLAjaxRequest(null,window.sfdcPage.relatedLists[0].listId);
+}
+
+var handleError = function(error)
+{
+   txt="There was an error on this page.\n\n"; 
+   txt+="Error description: " + err.description + "\n\n"; 
+   txt+="Click OK to continue.\n\n"; 
+   alert(txt); 
+};
